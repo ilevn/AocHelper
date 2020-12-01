@@ -85,6 +85,6 @@ public abstract class ADay {
         if (result == null) {
             result = "unsolved";
         }
-        return "%s\nTime: %d ms".formatted(result, endTime - startTime);
+        return String.format("%s\nTime: %d ms", result, endTime - startTime);
     }
 }
