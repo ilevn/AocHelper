@@ -76,7 +76,7 @@ public final class Input {
             try {
                 content = Files.readString(file.toPath());
             } catch (IOException e) {
-                throw new InputException("Could not read content from file for some reason.");
+                throw new InputException("Could not read content from file for some reason.", e);
             }
         } else {
             content = getHttp(day, year);
@@ -85,7 +85,7 @@ public final class Input {
                 file.getParentFile().mkdirs();
                 Files.write(file.toPath(), content.getBytes());
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new InputException("Writing to file failed.", e);
             }
         }
 
