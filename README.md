@@ -9,7 +9,9 @@ It provides functionality for automatically fetching puzzle input and helps with
 
 In order to get started, simply create a `config.properties` file at the project root with `secret=your session cookie`.  
 The session cookie can be obtained by visiting [Advent Of Code]("https://adventofcode.com/") and copying
-it from the network tab of your preferred browser.
+it from the network tab of your preferred browser.  
+
+A sample solution for the (non-existent) day 0 can be found at `src/main/java/year2020/Day0.java`.
 
 ## Licence
 
