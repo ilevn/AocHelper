@@ -3,6 +3,7 @@ package components;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,16 +13,17 @@ import java.util.Properties;
 
 
 public final class Input {
-    private final static HttpClient client = HttpClient.newHttpClient();
-    private final static String secret = loadSecret();
+    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final String SECRET = loadSecret();
 
     private Input() {
+        throw new AssertionError("This is a utility class with no instances.");
     }
 
     private static String loadSecret() {
         Properties prop = new Properties();
-        try {
-            prop.load(new FileInputStream("config.properties"));
+        try (InputStream input = new FileInputStream("config.properties")) {
+            prop.load(input);
         } catch (IOException e) {
             throw new InputException("Missing config.properties file at project root");
         }
@@ -33,22 +35,22 @@ public final class Input {
      * <br>
      * Note: This completely ignores cached input files.
      *
-     * @param day  The day for the puzzle input
-     * @param year The year for the puzzle input.
-     * @return A String with the puzzle input.
+     * @param day  the day of the puzzle input
+     * @param year the year of the puzzle input
+     * @return the puzzle input
      */
     public static String getHttp(int day, int year) {
-        String url = String.format("https://adventofcode.com/%d/day/%d/input", year, day);
+        String url = "https://adventofcode.com/%d/day/%d/input".formatted(year, day);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("Cookie", "session=" + secret)
+                .header("Cookie", "session=" + SECRET)
                 .GET().build();
 
         HttpResponse<String> response;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            throw new InputException("Could not retrieve puzzle content");
+            throw new InputException("Could not retrieve puzzle content", e);
 
         }
         if (response.statusCode() != 200) {
@@ -64,12 +66,12 @@ public final class Input {
      * This first looks for cached input files before attempting a fetch over
      * the network layer.
      *
-     * @param day  The day for the puzzle input
-     * @param year The year for the puzzle input.
-     * @return A String with the puzzle input.
+     * @param day  the day of the puzzle input
+     * @param year the year of the puzzle input
+     * @return the puzzle input
      */
     public static String get(int day, int year) {
-        File file = new File(String.format("src/main/resources/input/year%d/day%d", year, day));
+        File file = new File("src/main/resources/input/year%d/day%d".formatted(year, day));
         String content;
 
         if (file.exists()) {

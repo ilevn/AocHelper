@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public abstract class ADay {
     public final String data;
-    private List<String> linesList = null;
+    private List<String> linesList;
 
     /**
      * Returns a {@code List<String>} of the puzzle data.
@@ -20,7 +20,6 @@ public abstract class ADay {
         return linesList;
     }
 
-
     /**
      * Returns the {@code String} value of the puzzle data.
      */
@@ -28,9 +27,8 @@ public abstract class ADay {
         return data;
     }
 
-
     protected ADay(int year, int day) {
-        data = Input.get(day, year);
+        data = Input.get(day, year).trim();
     }
 
     /**
@@ -53,14 +51,15 @@ public abstract class ADay {
 
     /**
      * Runs the solutions for both parts and times them.
-     * This is usually done inside a main with for example:
+     * This is usually done inside a main method.
+     * Example:
      * <pre>{@code
      *    public static void main(String[] args) {
      *         solve(Day1.class);
      *     }
      * }</pre>
      *
-     * @param clazz The child class.
+     * @param clazz the child class
      */
     public static void solve(Class<? extends ADay> clazz) {
         ADay aDay;
@@ -82,9 +81,6 @@ public abstract class ADay {
         long startTime = System.currentTimeMillis();
         Object result = func.get();
         long endTime = System.currentTimeMillis();
-        if (result == null) {
-            result = "unsolved";
-        }
-        return String.format("%s\nTime: %d ms", result, endTime - startTime);
+        return "%s%nTime: %d ms".formatted(result == null ? "unsolved" : result, endTime - startTime);
     }
 }
