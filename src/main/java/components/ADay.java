@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public abstract class ADay {
     public final String data;
@@ -15,7 +14,7 @@ public abstract class ADay {
      */
     public List<String> getLinesList() {
         if (linesList == null) {
-            linesList = data.lines().collect(Collectors.toList());
+            linesList = data.lines().toList();
         }
         return linesList;
     }
@@ -34,7 +33,7 @@ public abstract class ADay {
     /**
      * Attempts to evaluate the first part of the puzzle.
      *
-     * @return The solution to part one.
+     * @return the solution to part one
      */
     public Object first() {
         return null;
@@ -43,7 +42,7 @@ public abstract class ADay {
     /**
      * Attempts to evaluate the second part of the puzzle.
      *
-     * @return The solution to part two.
+     * @return the solution to part two
      */
     public Object second() {
         return null;
