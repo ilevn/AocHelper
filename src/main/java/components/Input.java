@@ -11,7 +11,9 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.util.Properties;
 
-
+/**
+ * Puzzle input utility class.
+ */
 public final class Input {
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final String SECRET = loadSecret();
@@ -46,18 +48,19 @@ public final class Input {
                 .header("Cookie", "session=" + SECRET)
                 .GET().build();
 
-        HttpResponse<String> response;
+        HttpResponse<String> resp;
         try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            resp = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             throw new InputException("Could not retrieve puzzle content", e);
 
         }
-        if (response.statusCode() != 200) {
+        if (resp.statusCode() != 200) {
             // Something went wrong.
-            throw new InputException("Download exited with bad status code: " + response.statusCode());
+            var msg = "Could not download (status %d): %s".formatted(resp.statusCode(), resp.body());
+            throw new InputException(msg);
         }
-        return response.body();
+        return resp.body();
     }
 
     /**
